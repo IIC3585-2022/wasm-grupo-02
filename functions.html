@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Emscripten-Generated Code</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+      <div class="blur" id="blur">
+        <div class="result-box">
+            <p class="title">Tiempos</p>
+            <button class="close" type="button" onclick="closeWindow()">X</button>
+            <div class="results">
+                <div>
+                    <p class="title-J">Javascript</p>
+                    <p id="Javascript">Ejecutando...</p>
+                </div>
+                <div>
+                    <p class="title-C">C</p>
+                    <p id="C">Ejecutando...</p>
+                </div>
+            </div>
+            <div class="result-real">
+                <p id="result-real"></p>
+            </div>
+        </div>
+      </div>
+      <div class="content-box">
+        <p class="Title">WEB ASSEMBLY</p>
+        <input class="input" type="text" name="array" required>
+        <button class="button" type="button" onclick="resolve()">Resolver</button>
+      </div>
+    
+
+    <script type='text/javascript'>
+      var statusElement = document.getElementById('status');
+      var progressElement = document.getElementById('progress');
+      var spinnerElement = document.getElementById('spinner');
+
+      var Module = {
+        preRun: [],
+        postRun: [],
+        print: (function() {
+          var element = document.getElementById('output');
+          if (element) element.value = ''; // clear browser cache
+          return function(text) {
+            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+            // These replacements are necessary if you render to raw HTML
+            //text = text.replace(/&/g, "&amp;");
+            //text = text.replace(/</g, "&lt;");
+            //text = text.replace(/>/g, "&gt;");
+            //text = text.replace('\n', '<br>', 'g');
+            console.log(text);
+            if (element) {
+              element.value += text + "\n";
+              element.scrollTop = element.scrollHeight; // focus on bottom
+            }
+          };
+        })(),
+        canvas: (function() {
+          var canvas = document.getElementById('canvas');
+
+          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+          // application robust, you may want to override this behavior before shipping!
+          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+
+          return canvas;
+        })(),
+        setStatus: function(text) {
+          if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+          if (text === Module.setStatus.last.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+            spinnerElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+            if (!text) spinnerElement.style.display = 'none';
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+      Module.setStatus('Downloading...');
+      window.onerror = function(event) {
+        // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+        Module.setStatus('Exception thrown, see JavaScript console');
+        spinnerElement.style.display = 'none';
+        Module.setStatus = function(text) {
+          if (text) console.error('[post-exception status] ' + text);
+        };
+      };
+      function resolve() {
+          // JS
+          document.getElementById("blur").style.visibility = "visible";
+          const val = document.querySelector('input').value;
+          var arr = val.split(',');
+          arr = arr.map(x => parseInt(x));
+          // let arr =[7, 3, 2, 1, 5, 4, 8];
+          let N = arr.length;
+          init_time = Date.now();
+          // Function Call
+          const time = checkEqualSum(arr, N);
+          document.getElementById("Javascript").innerHTML = time;
+          //C
+          const myArray = new Uint8Array(arr);
+          const buffer = Module._malloc(N);
+          Module.HEAPU8.set(myArray, buffer);
+          const splitter = cwrap('splitter', 'number', ['number', 'number']);
+          const time_c = splitter(buffer, N);
+          document.getElementById("C").innerHTML = time_c;
+
+
+
+
+          
+      }
+    </script>
+    <script async type="text/javascript" src="functions.js"></script>
+    <script>
+      function closeWindow() {
+          document.getElementById("blur").style.visibility = "hidden";
+      }
+      
+  </script>
+  <!-- <script>
+      setTimeout(() => {
+          const add = cwrap('add', 'number', ['number', 'number']);
+          console.log(add(9, 7));
+      }, 4000);
+  </script> -->
+  <script>
+
+      // Java script program for
+      // the above approach
+       
+       
+      // Utility function to check array can
+      // be partition to 3 subsequences of
+      // equal sum or not
+      let array1=[];
+      let array2=[];
+      let array3=[];
+      function checkEqualSumUtil( arr,  N,
+                                   sm1,  sm2,
+                                   sm3,  j, arr1, arr2, arr3)
+      {
+      // Base Case
+      if (j == N)
+      {
+          if (sm1 == sm2 && sm2 == sm3)
+          {
+              array1=arr1;
+              array2=arr2;
+              array3=arr3;
+              return 1;
+          }
+          else
+          return 0;
+      }
+      else
+      {
+          // When element at index
+          // j is added to sm1
+          let l = checkEqualSumUtil(arr, N,
+                                  sm1 + arr[j],
+                                  sm2, sm3, j + 1, [...arr1, arr[j]], arr2, arr3);
+          // When element at index
+          // j is added to sm2
+          let m = checkEqualSumUtil(arr, N, sm1,
+                                  sm2 + arr[j],
+                                  sm3, j + 1, arr1, [...arr2, arr[j]], arr3);
+       
+          // When element at index
+          // j is added to sm3
+          let r = checkEqualSumUtil(arr, N, sm1, sm2,
+                                  sm3 + arr[j], j + 1, arr1, arr2, [...arr3, arr[j]]);
+       
+          // Return maximum value among
+          // all above 3 recursive call
+          return Math.max(Math.max(l, m), r);
+      }
+      }
+       
+      // Function to check array can be
+      // partition to 3 subsequences of
+      // equal sum or not
+      function checkEqualSum(arr,N)
+      {
+          // Initialise 3 sums to 0
+          let sum1, sum2, sum3;
+          
+          sum1 = sum2 = sum3 = 0;
+          let arr1, arr2, arr3;
+          arr1 = arr2 = arr3 = [];
+          
+          // Function Call
+          if (checkEqualSumUtil(arr, N, sum1,
+                                  sum2, sum3, 0, arr1, arr2, arr3) == 1)
+          {
+              document.getElementById("result-real").innerHTML = `[${array1}] [${array2}] [${array3}]`;
+          }
+          else
+          {
+              document.getElementById("result-real").innerHTML = "Not Possible";
+          }
+          return Date.now() - init_time;
+      }
+       
+      </script>
+  </body>
+</html>
+
+

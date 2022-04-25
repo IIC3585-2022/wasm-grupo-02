@@ -1,4 +1,4 @@
-import initWasm from '@/../wasm/main.js';
+import initWasm from '../../wasm/main.js';
 
 /**
  * @param {Array<number>} array

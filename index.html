@@ -3,10 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/assets/styles/index.css">
     <title>WASM</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div class="modal" id="modal">
+      <div class="result-box">
+        <p class="title">Tiempos</p>
+        <button class="close" id="close" type="button">X</button>
+        <div class="results">
+          <div>
+            <p class="lang-title">Javascript</p>
+            <p id="lang-js">Ejecutando...</p>
+          </div>
+          <div>
+            <p class="lang-title">C</p>
+            <p id="lang-c">Ejecutando...</p>
+          </div>
+        </div>
+        <div class="result" id="result"></div>
+      </div>
+    </div>
+    <div class="content-box">
+      <p class="app-title">WEB ASSEMBLY</p>
+      <input class="input" id="input" type="text" required>
+      <button class="button" id="button" type="button">Resolver</button>
+    </div>
     <script type="module" src="/main.js"></script>
   </body>
 </html>

@@ -47,4 +47,6 @@ const checkEqualSumBackend = (array, sub1, sub2, sub3, currentIndex) => {
  * @param {Array<number>} array
  * @returns {[Array<number>, Array<number>, Array<number>] | false}
  */
-export const checkEqualSum = (array) => checkEqualSumBackend(array, [], [], [], 0);
+export const checkEqualSum = (array) => new Promise((resolve) => {
+  resolve(checkEqualSumBackend(array, [], [], [], 0));
+});

@@ -1,0 +1,97 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    background-color: whitesmoke;
+}
+
+.content-box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content-box .app-title {
+    font-size: 3vw;
+    color: black;
+    margin: 0;
+    margin-top: 3vw;
+}
+
+.content-box .input {
+    width: 20vw;
+    height: 2vw;
+    border: 2px solid black;
+    font-size: 1.5vw;
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+}
+
+.content-box .button {
+    width: 10vw;
+    background-color: black;
+    color: white;
+    font-size: 1.2vw;
+    border: none;
+    padding: 0.5vw 1vw;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.content-box .button:hover {
+    background-color: coral;
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.365);
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    visibility: hidden;
+}
+
+.modal .result-box {
+    position: absolute;
+    height: 30vh;
+    width: 40vw;
+    background-color: white;
+    border-radius: 10px;
+    top: 20vh;
+    left: 30vw;
+    text-align: center;
+}
+
+.modal .result-box .title {
+    font-size: 2vw;
+    margin-top: 1vw;
+}
+
+.modal .result-box .close {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 100px;
+    height: 2vw;
+    width: 2vw;
+    cursor: pointer;
+    position: absolute;
+    right: 1vw;
+    top: 1vw;
+}
+
+.modal .result-box .close:hover {
+    background-color: coral;
+}
+
+.modal .result-box .results {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.modal .result-box .results .lang-title {
+    font-size: 1.8vw;
+    margin-top: 0vw;
+    color: black;
+    margin-bottom: 0;
+}
